@@ -10,9 +10,13 @@
     <small>Written on {{$post->created_at}}</small>
     <hr>
 
-    {!!Form::open(['action' => ['PostsController@destroy', $post->id], 'method' => 'POST', 'class' => 'no-wrap'])!!}
-        <a href="{{ route('posts.edit', [$post->id])}}" class="btn btn-primary">Edit</a>
-        {{Form::hidden('_method', 'DELETE') }}
-        {{Form::submit('Delete',['class' => 'btn btn-danger']) }}
-    {!!Form::close() !!}
+    @if(!Auth::guest())
+        @if(Auth::user()->id == $post->user_id)
+            {!!Form::open(['action' => ['PostsController@destroy', $post->id], 'method' => 'POST', 'class' => 'no-wrap'])!!}
+                <a href="{{ route('posts.edit', [$post->id])}}" class="btn btn-primary">Edit</a>
+                {{Form::hidden('_method', 'DELETE') }}
+                {{Form::submit('Delete',['class' => 'btn btn-danger']) }}
+            {!!Form::close() !!}
+        @endif
+    @endif
 @endsection
